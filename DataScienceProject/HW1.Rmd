@@ -1,0 +1,171 @@
+---
+title: "Data Science and Analytics 2022"
+author: "Rozerin Yıldız"
+output: html_document
+---
+
+<style type="text/css">
+  body{
+  font-size: 11pt;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<!--IMPORTANT!!!!! Please fill out the sections that say:"write your code here"-->
+<!--6. For every step above, write down one or two sentences description-->
+
+<br>
+
+```{r}
+library(ggplot2)
+library(modelr) 
+library(tidyverse)
+
+```
+
+<br>
+
+### 1) Download the dataset from the link below and import the dataset to R as a dataframe named ***'alcohol_data'***.
+
+<br>
+
+***https://www.kaggle.com/datasets/whenamancodes/alcohol-effects-on-study***
+
+<br>
+```{r}
+  # Write your code here
+    dataset <- read.csv("C:\\Users\\rozer\\Downloads\\Maths.csv")
+    alcohol_data <- data.frame(dataset)
+
+    head(alcohol_data)
+```
+
+<br>
+
+### 2)
+
+#### A) Create a new dataframe as ***'alcohol_data_small'*** from ***'alcohol_data'*** by choosing at least 5 columns (at least one factor and one numeric). 
+
+<br>
+
+```{r}
+  # Write your code here
+ school <-alcohol_data$school
+ sex <- alcohol_data$sex
+ age <- alcohol_data$age
+ reason <- alcohol_data$reason
+ studytime <- alcohol_data$studytime
+
+  alcohol_data_small <- data.frame(school,sex,age,reason,studytime)
+head(alcohol_data_small)
+  
+```
+
+<br>
+
+#### B) Check and ***re-format*** column/ variable types (factor, charecter, date, integer etc).
+
+<br>
+
+```{r}
+  # Write your code here
+
+typeof(school)
+typeof(sex)
+typeof(age)
+typeof(reason)
+typeof(studytime)
+
+study_time_float <- sprintf("%1.1f",studytime)
+
+alcohol_data_small$studytime <- study_time_float
+head(alcohol_data_small)
+
+
+```
+<br>
+
+#### C) By using the given dictionary in kaggle, rename the variables as a more detailed version (e.g. 'F' => 'Female').
+
+<br>
+```{r}
+  # Write your code here
+gender_words <- c('F' = 'Female', 'M' = 'Male')
+sex_detail <- as.character(gender_words[alcohol_data_small$sex])
+alcohol_data_small$sex <- sex_detail
+head(alcohol_data_small)
+```
+<br>
+
+### 3) 
+
+#### A) Use ***filter***, ***arrange***, ***select*** to manage your data.
+<br>
+
+```{r}
+  # Write your code here
+  select(alcohol_data_small, sex)
+  filter(alcohol_data_small, sex=="Female")
+  arrange(alcohol_data_small, desc(studytime))
+
+```
+
+
+<br>
+
+#### B) Use ***mutate*** or ***transmute*** to create a new dataframe and save it as ***'new_data.csv'*** in your current working directory.
+
+<br>
+
+```{r}
+  # Write your code here
+new <- mutate(alcohol_data_small, 
+       birth_year = 2022 - age)
+new
+write.csv(new, 'new_data.csv')
+```
+
+<br>
+
+### 4) Use ***'alcohol_data_small'*** dataframe and ggplot2 library to draw the following plots.
+
+<br>
+
+#### A) Draw a ***histogram*** and a ***bar chart*** for any variables and comment about shape and frequency. 
+
+<br>
+
+```{r}
+  # Write your code here
+ggplot(data=alcohol_data_small) + geom_histogram(mapping = aes(x=age), binwidth = 0.5,color="red", fill="red")
+
+ggplot(alcohol_data_small, aes(x=age, fill = sex)) + geom_bar()
+```
+<br>
+ As seen in the histogram, the age range of the people in the data is concentrated between the ages of 15 and 18.
+<br>
+<br>
+ As can be seen in the bar chart, while the ratio of men and women is close to each other in the age range of 15 - 20, only men are seen after the age of 20.
+<br>
+
+<br>
+
+#### B) Draw a ***boxplot*** and comment about the distribution and outliers. 
+
+<br>
+
+
+```{r}
+  # Write your code here
+ggplot(alcohol_data_small, aes(x=sex, y= age, color=sex)) + geom_boxplot(outlier.size = 2)
+#TODO: comment about dist and outliers
+
+```
+<br>
+As seen in the box plot, the average age of women is 17 and that of men is 16. In addition, an outlier is seen in men after the age of 20.
+<br>
+<br>
+<br>
